@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meu Portfólio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      transition: background-image 0.4s ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen p-6 text-black">
+
+  <!-- Botão de troca do fundo -->
+  <div class="fixed top-4 right-4 z-50">
+    <input type="file" id="bg-upload" class="hidden" accept="image/*" />
+    <button onclick="document.getElementById('bg-upload').click()"
+            class="bg-black/60 hover:bg-black/80 text-white px-4 py-2 rounded-lg shadow-lg transition">
+      Trocar Fundo
+    </button>
+  </div>
+
+  <!-- Conteúdo do portfólio -->
+  <div class="max-w-5xl mx-auto space-y-12">
+
+    <!-- Perfil -->
+    <div class="text-center mt-24">
+      <div class="relative inline-block">
+        <img id="profile-pic" src="https://via.placeholder.com/150"
+             class="w-48 h-48 rounded-full border-4 border-white object-cover shadow-lg" />
+        <input type="file" id="upload-photo" class="hidden" accept="image/*">
+        <button onclick="document.getElementById('upload-photo').click()"
+                class="absolute -bottom-5 right-0 bg-white text-black px-2 py-1 rounded-full text-sm shadow hover:bg-gray-200 transition">
+          Trocar
+        </button>
+      </div>
+      <div class="mt-10">
+        <h1 id="nome" contenteditable="true"
+            class="text-4xl font-bold hover:bg-white/20 rounded p-2 cursor-text inline-block text-black">
+          Seu Nome
+        </h1>
+      </div>
+    </div>
+
+    <!-- Sobre Mim -->
+    <section class="text-center px-4">
+      <h2 class="text-3xl font-semibold mb-3 text-black">Sobre Mim</h2>
+      <p id="sobre" contenteditable="true"
+         class="text-lg text-white bg-black p-4 rounded-lg max-w-3xl mx-auto cursor-text hover:outline hover:outline-white/30">
+        Escreva aqui uma descrição sobre você.
+      </p>
+    </section>
+
+    <!-- Meus Projetos -->
+    <section class="px-4">
+      <h2 class="text-3xl font-semibold text-center mb-6 text-black">Meus Projetos</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+
+        <!-- Projeto 1 -->
+        <div class="bg-white/10 rounded-xl p-3 text-center shadow-lg">
+          <div class="relative">
+            <img id="proj-img-1" src="https://via.placeholder.com/300x200"
+                 class="w-full h-40 object-cover rounded-lg shadow mb-2" />
+            <input type="file" id="proj-file-1" class="hidden" accept="image/*" />
+            <button onclick="document.getElementById('proj-file-1').click()"
+                    class="absolute bottom-2 right-2 bg-white text-black px-2 py-1 text-xs rounded shadow hover:bg-gray-200">
+              Mudar Imagem
+            </button>
+          </div>
+          <h3 id="proj-title-1" contenteditable="true" class="text-lg font-semibold cursor-text text-black">Projeto 1</h3>
+          <p id="proj-desc-1" contenteditable="true" class="text-sm text-white cursor-text">Descrição do projeto 1.</p>
+        </div>
+
+        <!-- Projeto 2 -->
+        <div class="bg-white/10 rounded-xl p-3 text-center shadow-lg">
+          <div class="relative">
+            <img id="proj-img-2" src="https://via.placeholder.com/300x200"
+                 class="w-full h-40 object-cover rounded-lg shadow mb-2" />
+            <input type="file" id="proj-file-2" class="hidden" accept="image/*" />
+            <button onclick="document.getElementById('proj-file-2').click()"
+                    class="absolute bottom-2 right-2 bg-white text-black px-2 py-1 text-xs rounded shadow hover:bg-gray-200">
+              Mudar Imagem
+            </button>
+          </div>
+          <h3 id="proj-title-2" contenteditable="true" class="text-lg font-semibold cursor-text text-black">Projeto 2</h3>
+          <p id="proj-desc-2" contenteditable="true" class="text-sm text-white cursor-text">Descrição do projeto 2.</p>
+        </div>
+
+        <!-- Projeto 3 -->
+        <div class="bg-white/10 rounded-xl p-3 text-center shadow-lg">
+          <div class="relative">
+            <img id="proj-img-3" src="https://via.placeholder.com/300x200"
+                 class="w-full h-40 object-cover rounded-lg shadow mb-2" />
+            <input type="file" id="proj-file-3" class="hidden" accept="image/*" />
+            <button onclick="document.getElementById('proj-file-3').click()"
+                    class="absolute bottom-2 right-2 bg-white text-black px-2 py-1 text-xs rounded shadow hover:bg-gray-200">
+              Mudar Imagem
+            </button>
+          </div>
+          <h3 id="proj-title-3" contenteditable="true" class="text-lg font-semibold cursor-text text-black">Projeto 3</h3>
+          <p id="proj-desc-3" contenteditable="true" class="text-sm text-white cursor-text">Descrição do projeto 3.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Relógio -->
+    <p id="currentTime" class="text-center text-white mt-10 text-lg"></p>
+
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function saveToStorage(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (e) {
+        console.warn('Não foi possível salvar no localStorage:', e);
+      }
+    }
+
+    function loadFromStorage(key) {
+      return localStorage.getItem(key);
+    }
+
+    function readFileAsDataURL(input, callback) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => callback(e.target.result);
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Trocar imagem de fundo
+    const bgUpload = document.getElementById('bg-upload');
+    bgUpload.addEventListener('change', (event) => {
+      readFileAsDataURL(event.target, (dataURL) => {
+        document.body.style.backgroundImage = `url('${dataURL}')`;
+        saveToStorage('backgroundImage', dataURL);
+      });
+    });
+
+    // Foto de perfil
+    const profilePic = document.getElementById('profile-pic');
+    const uploadInput = document.getElementById('upload-photo');
+    uploadInput.addEventListener('change', (event) => {
+      readFileAsDataURL(event.target, (dataURL) => {
+        profilePic.src = dataURL;
+        saveToStorage('profilePic', dataURL);
+      });
+    });
+
+    // Projetos - imagens
+    for (let i = 1; i <= 3; i++) {
+      const imgInput = document.getElementById(`proj-file-${i}`);
+      const imgElement = document.getElementById(`proj-img-${i}`);
+
+      imgInput.addEventListener('change', (event) => {
+        readFileAsDataURL(event.target, (dataURL) => {
+          imgElement.src = dataURL;
+          saveToStorage(`proj-img-${i}`, dataURL);
+        });
+      });
+    }
+
+    // Nome e Sobre Mim
+    const nome = document.getElementById('nome');
+    nome.addEventListener('input', () => {
+      saveToStorage('nome', nome.innerText);
+    });
+
+    const sobre = document.getElementById('sobre');
+    sobre.addEventListener('input', () => {
+      saveToStorage('sobre', sobre.innerText);
+    });
+
+    // Títulos e descrições dos projetos
+    for (let i = 1; i <= 3; i++) {
+      const title = document.getElementById(`proj-title-${i}`);
+      const desc = document.getElementById(`proj-desc-${i}`);
+
+      title.addEventListener('input', () => {
+        saveToStorage(`proj-title-${i}`, title.innerText);
+      });
+
+      desc.addEventListener('input', () => {
+        saveToStorage(`proj-desc-${i}`, desc.innerText);
+      });
+    }
+
+    // Relógio
+    function updateCurrentTime() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('pt-BR');
+      document.getElementById('currentTime').innerText = `Hora atual: ${timeString}`;
+    }
+    setInterval(updateCurrentTime, 1000);
+    updateCurrentTime();
+
+    // Restaurar dados ao carregar
+    window.addEventListener('DOMContentLoaded', () => {
+      const bgImage = loadFromStorage('backgroundImage');
+      if (bgImage) {
+        document.body.style.backgroundImage = `url('${bgImage}')`;
+      }
+
+      const profileImage = loadFromStorage('profilePic');
+      if (profileImage) {
+        profilePic.src = profileImage;
+      }
+
+      const savedNome = loadFromStorage('nome');
+      if (savedNome) {
+        nome.innerText = savedNome;
+      }
+
+      const savedSobre = loadFromStorage('sobre');
+      if (savedSobre) {
+        sobre.innerText = savedSobre;
+      }
+
+      for (let i = 1; i <= 3; i++) {
+        const savedImg = loadFromStorage(`proj-img-${i}`);
+        const savedTitle = loadFromStorage(`proj-title-${i}`);
+        const savedDesc = loadFromStorage(`proj-desc-${i}`);
+
+        if (savedImg) document.getElementById(`proj-img-${i}`).src = savedImg;
+        if (savedTitle) document.getElementById(`proj-title-${i}`).innerText = savedTitle;
+        if (savedDesc) document.getElementById(`proj-desc-${i}`).innerText = savedDesc;
+      }
+    });
+  </script>
+</body>
+</html>
